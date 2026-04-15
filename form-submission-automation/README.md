@@ -8,6 +8,7 @@ This project is an automated workflow built using n8n.
 - Sends automated email via Gmail
 
 ## 🖼️ Screenshots
+![workflow](workflow.png)
 
 ## 🛠 Tech Used
 - n8n
