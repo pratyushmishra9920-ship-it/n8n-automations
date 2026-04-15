@@ -1,0 +1,218 @@
+{
+  "name": "Automation 1",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Startup Idea Analyzer",
+        "formDescription": "Submit your idea for AI-powered validation and insights.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Startup Idea Name"
+            },
+            {
+              "fieldLabel": "Problem"
+            },
+            {
+              "fieldLabel": "Solution"
+            },
+            {
+              "fieldLabel": "Goal"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -80,
+        112
+      ],
+      "id": "b1400722-6611-4db8-9d01-edebba7a5ef4",
+      "name": "On form submission",
+      "webhookId": "b99c32ed-b85f-4c37-8863-08f8bb8a5084"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1LROHQyu8uUAFbqrvwXWM9lUAurWpiqRrFYyITGEK1U8",
+          "mode": "list",
+          "cachedResultName": "Automation 1 sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LROHQyu8uUAFbqrvwXWM9lUAurWpiqRrFYyITGEK1U8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LROHQyu8uUAFbqrvwXWM9lUAurWpiqRrFYyITGEK1U8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Startup Idea Name": "={{ $json['Startup Idea Name'] }}",
+            "Problem": "={{ $json.Problem }}",
+            "Solution": "={{ $json.Solution }}",
+            "Goal": "={{ $json.Goal }}",
+            "Time": "={{ $json.submittedAt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Startup Idea Name",
+              "displayName": "Startup Idea Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Problem",
+              "displayName": "Problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Solution",
+              "displayName": "Solution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Goal",
+              "displayName": "Goal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        176,
+        112
+      ],
+      "id": "0f9df7e4-eea5-4ea8-bbd2-db14971e9320",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mZczMb8y71wlM8C4",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "alphanoobcoder123@gmail.com",
+        "subject": "New Entries Submitted!",
+        "emailType": "text",
+        "message": "=Hi, There is new entry\n\nStartup Name : {{ $json['Startup Idea Name'] }}\n\nProblem :{{ $json.Problem }}\n\nSolution :{{ $json.Solution }}\n\nGoal :{{ $('On form submission').item.json.Goal }}\n\nTime :  {{ $('On form submission').item.json.submittedAt }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        112
+      ],
+      "id": "41012dea-ec23-4cad-9afa-39498c5138e4",
+      "name": "Send a message",
+      "webhookId": "800f903f-1a48-4ea3-9eb2-90c684e29e5e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "c9Kz9jWKhlIIhkN2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 🧠 Form Submission Automation\n\n### This automation consists of 3 nodes:\n1 - On Form Submission - : Triggers when a user submits the form\n2 - Google Sheets - : Appends the submitted data as a new row\n3 - Gmail Node - : Sends an email based on the submitted data\n",
+        "height": 192,
+        "width": 464
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -16,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "d51a3ae9-1925-41cc-b3c3-1632a825f4a5",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "487c33c6-a0bf-4fd8-90b7-7ce09ea5c705",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b5d9c2ac6be1b1957c8209a7cae1c80ecee86b8eefb2c2df1196e1b94d527f9c"
+  },
+  "id": "wDSW32P3menh2peb",
+  "tags": [
+    {
+      "updatedAt": "2026-04-15T03:58:13.448Z",
+      "createdAt": "2026-04-15T03:58:13.448Z",
+      "id": "MBWMfJsx33M9QYyX",
+      "name": "n8n-fundamental"
+    }
+  ]
+}
