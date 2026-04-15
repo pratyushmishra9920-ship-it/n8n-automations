@@ -7,6 +7,8 @@ This project is an automated workflow built using n8n.
 - Stores data in Google Sheets
 - Sends automated email via Gmail
 
+## 🖼️ Screenshots
+
 ## 🛠 Tech Used
 - n8n
 - Google Sheets API
