@@ -1,0 +1,480 @@
+{
+  "name": "Automation 2",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## AI User Insight Enrichment\n\n### This workflow consists of 7 nodes - :\n\n1. On Form Submission – captures user input from the form (ID, name, number, budget)\n\n2. Append Row in Sheet – stores submitted data into Google Sheets\n\n3. HTTP Request (Agify) – predicts age using the name\n\n4. HTTP Request1 (Nationalize) – predicts nationality using the name\n\n5. HTTP Request2 (Genderize) – predicts gender using the name\n\n6. Append or Update Row in Sheet – updates sheet with predicted results (age, gender, nationality)\n\n7. Send a Message (Gmail) – sends email with all user details and predictions",
+        "height": 416,
+        "width": 752
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -240,
+        -368
+      ],
+      "typeVersion": 1,
+      "id": "e11c5c06-5a0c-4cc4-b775-b9ab01c99550",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "url": "https://api.agify.io/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -160,
+        128
+      ],
+      "id": "e64d6bfe-ab32-43f7-ba96-73905d0a8775",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "https://api.nationalize.io/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        64,
+        128
+      ],
+      "id": "72d611c0-2002-4150-b673-be2d3a5e0468",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.genderize.io/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        288,
+        128
+      ],
+      "id": "ff801b36-a181-4c5b-900e-ce9a69cba0a5",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1FL1jS0MX2BbYbXgeQK6tGjXvUaTJ7VskDsIHNbIwYPA",
+          "mode": "list",
+          "cachedResultName": "Automation 2 Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FL1jS0MX2BbYbXgeQK6tGjXvUaTJ7VskDsIHNbIwYPA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FL1jS0MX2BbYbXgeQK6tGjXvUaTJ7VskDsIHNbIwYPA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "gender": "={{ $json.gender }}",
+            "nationality": "={{ $('HTTP Request1').item.json.country.first() }}",
+            "age": "={{ $('HTTP Request').item.json.age }}",
+            "id": "={{ $('Append row in sheet').item.json.id }}",
+            "name": "={{ $('Append row in sheet').item.json.name }}",
+            "budget": "={{ $('Append row in sheet').item.json.budget }}",
+            "number": "={{ $('Append row in sheet').item.json.number }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "number",
+              "displayName": "number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nationality",
+              "displayName": "nationality",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "age",
+              "displayName": "age",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        496,
+        128
+      ],
+      "id": "38deda11-de13-457d-b033-a5a9960ea3ff",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mZczMb8y71wlM8C4",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "alphanoobcoder123@gmail.com",
+        "subject": "New Entry",
+        "emailType": "text",
+        "message": "=Hey, There is New Entry \n\nNAME : {{ $json.name }}\n\nID : {{ $('Append row in sheet').item.json.id }}\n\nPHONE NUMBER : {{ $('Append row in sheet').item.json.number }}\n\nBUDGET : {{ $('Append row in sheet').item.json.budget }}\n\nGENDER : {{ $('HTTP Request2').item.json.gender }}\n\nNATIONALITY : {{ $('HTTP Request1').item.json.country.first().country_id }}\n\nAGE : {{ $('HTTP Request').item.json.age }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        128
+      ],
+      "id": "65bbd53e-4879-48f5-b340-698b291e354e",
+      "name": "Send a message",
+      "webhookId": "57a1dc20-dd9c-4866-9d5e-96c5e61ee0c4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "c9Kz9jWKhlIIhkN2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1FL1jS0MX2BbYbXgeQK6tGjXvUaTJ7VskDsIHNbIwYPA",
+          "mode": "list",
+          "cachedResultName": "Automation 2 Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FL1jS0MX2BbYbXgeQK6tGjXvUaTJ7VskDsIHNbIwYPA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FL1jS0MX2BbYbXgeQK6tGjXvUaTJ7VskDsIHNbIwYPA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "name": "={{ $json.name }}",
+            "number": "={{ $json.number }}",
+            "budget": "={{ $json.budget }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "number",
+              "displayName": "number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nationality",
+              "displayName": "nationality",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "age",
+              "displayName": "age",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -384,
+        128
+      ],
+      "id": "6593fe25-f746-4313-963c-59331829da46",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mZczMb8y71wlM8C4",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "User Details for AI Analysis",
+        "formDescription": "Enter basic details to generate AI predictions for gender, age, and nationality.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "id",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "name"
+            },
+            {
+              "fieldLabel": "number",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "budget"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -608,
+        128
+      ],
+      "id": "70a1a97c-451c-4387-88cd-9eda2bc3ba0a",
+      "name": "On form submission",
+      "webhookId": "7bd4c5e4-825f-4682-934a-c7ff04c41da6"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "8ea1b6f5-0125-458e-9d83-5e36ddb26e5f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b5d9c2ac6be1b1957c8209a7cae1c80ecee86b8eefb2c2df1196e1b94d527f9c"
+  },
+  "id": "RhcAMY5tNvbjReCk",
+  "tags": [
+    {
+      "updatedAt": "2026-04-15T03:58:13.448Z",
+      "createdAt": "2026-04-15T03:58:13.448Z",
+      "id": "MBWMfJsx33M9QYyX",
+      "name": "n8n-fundamental"
+    },
+    {
+      "updatedAt": "2026-04-15T14:13:11.019Z",
+      "createdAt": "2026-04-15T14:13:11.019Z",
+      "id": "PbrwrKaTCYLU5DEH",
+      "name": "second-automation"
+    }
+  ]
+}
